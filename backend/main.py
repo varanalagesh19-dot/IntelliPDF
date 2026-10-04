@@ -109,18 +109,23 @@ async def timing_middleware(request: Request, call_next: Any) -> JSONResponse:
 
 
 # ── Routers ──────────────────────────────────────────────────────────────
-app.include_router(upload_router.router)
-app.include_router(chat_router.router)
-app.include_router(quiz_router.router)
-app.include_router(evaluate_router.router)
-app.include_router(study_plan_router.router)
-app.include_router(mock_exam_router.router)
+for _r in (
+    upload_router.router,
+    chat_router.router,
+    quiz_router.router,
+    evaluate_router.router,
+    study_plan_router.router,
+    mock_exam_router.router,
+):
+    app.include_router(_r)
+    app.include_router(_r, prefix="/api")
 
 
 # ── Core endpoints ───────────────────────────────────────────────────────
 
 
 @app.get("/health", tags=["core"])
+@app.get("/api/health", tags=["core"])
 def health() -> dict[str, Any]:
     """Liveness probe plus a per-service availability report."""
     llm_health = get_llm_client().health()
@@ -190,3 +195,11 @@ def root() -> dict[str, str]:
         "upload": "POST /upload (multipart: file=@notes.pdf, syllabus=optional)",
         "disclaimer": DISCLAIMER,
     }
+
+
+if __name__ == "__main__":
+    import os
+    import uvicorn
+
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run("backend.main:app", host="0.0.0.0", port=port, reload=False)

@@ -74,12 +74,15 @@ class HttpTransport:
             timeout=timeout,
         )
 
-    def reachable(self, timeout: float = 3.0) -> bool:
+    def reachable(self, timeout: float = 15.0) -> bool:
         """Return ``True`` when the API answers its health probe."""
-        try:
-            return self.request("GET", "/health", timeout=timeout).status_code == 200
-        except Exception:  # noqa: BLE001 - offline is a normal case
-            return False
+        for path in ("/health", "/api/health", ""):
+            try:
+                if self.request("GET", path, timeout=timeout).status_code == 200:
+                    return True
+            except Exception:  # noqa: BLE001
+                continue
+        return False
 
 
 class InProcessTransport:
@@ -152,7 +155,7 @@ def get_transport(force: str | None = None) -> HttpTransport | InProcessTranspor
     if force == "http" and isinstance(_transport, HttpTransport):
         return _transport
 
-    base_url = os.getenv("API_URL", "http://127.0.0.1:8000").rstrip("/")
+    base_url = (os.getenv("API_BASE_URL") or os.getenv("API_URL", "http://127.0.0.1:8000")).rstrip("/")
     flag = (os.getenv("INTELLIPDF_INPROCESS") or "").strip().lower()
 
     if flag in {"1", "true", "yes"}:

@@ -154,7 +154,17 @@ class Embedder:
             texts = [texts]
         if not texts:
             return np.zeros((0, self.dim), dtype=np.float32)
-        return np.asarray(self._impl.encode(list(texts)), dtype=np.float32)
+        try:
+            return np.asarray(self._impl.encode(list(texts)), dtype=np.float32)
+        except (MemoryError, Exception) as exc:
+            if not isinstance(self._impl, HashingEmbedder):
+                LOGGER.warning(
+                    "Embedding failed or exceeded RAM limit (%s); falling back to HashingEmbedder.",
+                    exc,
+                )
+                self._impl = HashingEmbedder(self.dim)
+                return np.asarray(self._impl.encode(list(texts)), dtype=np.float32)
+            raise
 
     def encode_query(self, query: str) -> np.ndarray:
         """Embed a single query string and return a ``(1, dim)`` matrix."""

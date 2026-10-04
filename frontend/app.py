@@ -46,7 +46,9 @@ from backend.services.mark_wise import MARK_TYPES, marks_distribution  # noqa: E
 from backend.utils.language import LANGUAGE_LABELS  # noqa: E402
 from frontend.api_client import get_transport  # noqa: E402
 
-API_URL = os.getenv("API_URL", "http://127.0.0.1:8000").rstrip("/")
+import os
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8080/api")
+API_URL = os.getenv("API_URL", API_BASE_URL.replace("/api", "") if API_BASE_URL else "http://127.0.0.1:8000").rstrip("/")
 
 st.set_page_config(
     page_title="IntelliPDF",

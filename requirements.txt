@@ -1,48 +1,20 @@
-# ── IntelliPDF — Python dependencies ────────────────────────────────
-# All services used are FREE TIER / LOCAL: Groq (free), Gemini (free),
-# Ollama (local), FAISS (local), SQLite (local).
-# Install:  pip install -r requirements.txt
-# Python:   3.10+
-
-# ── Web framework ───────────────────────────────────────────────────
 fastapi
 uvicorn[standard]
 streamlit
-python-multipart
-
-# ── PDF parsing ─────────────────────────────────────────────────────
 pymupdf
-
-# ── Chunking (LangChain) ────────────────────────────────────────────
 langchain
 langchain-community
 langchain-text-splitters
-
-# ── Embeddings + vector search ──────────────────────────────────────
 sentence-transformers
 faiss-cpu
 numpy
-
-# ── LLM providers (free tier, tried in fallback order) ──────────────
 groq
 google-generativeai
-requests
-
-# ── Config / validation / storage / auth ────────────────────────────
+python-multipart
 pydantic
 python-dotenv
-firebase-admin
-
-# ── In-process API transport (frontend/api_client.py on Streamlit Cloud) ──
-httpx
-
-# ── Frontend analytics ──────────────────────────────────────────────
 pandas
 plotly
-
-# ── SQuAD 2.0 evaluation ────────────────────────────────────────────
+requests
 datasets
 scikit-learn
-
-# ── Testing ─────────────────────────────────────────────────────────
-pytest
