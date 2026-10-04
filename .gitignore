@@ -21,6 +21,8 @@ ENV/
 .env
 .env.local
 .env.*.local
+firebase-service-account.json
+*-service-account.json
 
 # Streamlit
 .streamlit/secrets.toml
