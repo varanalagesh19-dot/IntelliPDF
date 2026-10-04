@@ -900,9 +900,7 @@ with exam_tab:
                         else:
                             st.session_state["exam_result"] = graded
             with col_reset:
-                if st.button(
-                    "New paper", use_container_width=True, kind="secondary"
-                ):
+                if st.button("New paper", use_container_width=True):
                     for k in (
                         "exam",
                         "exam_result",
@@ -1195,9 +1193,7 @@ with revision_tab:
                     unsafe_allow_html=True,
                 )
 
-            if st.button(
-                "Shuffle new set", use_container_width=True, kind="secondary"
-            ):
+            if st.button("Shuffle new set", use_container_width=True):
                 st.session_state.pop("revision_cards", None)
                 st.rerun()
 

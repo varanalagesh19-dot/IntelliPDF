@@ -224,18 +224,7 @@ div.stDownloadButton > button:focus-visible {
   outline-offset: 2px !important;
 }
 
-/* Secondary Button / Outline Button */
-div.stButton > button[kind="secondary"] {
-  background-color: var(--color-white) !important;
-  color: var(--color-dark) !important;
-  border: 1px solid var(--color-border) !important;
-}
 
-div.stButton > button[kind="secondary"]:hover {
-  background-color: var(--color-white) !important;
-  color: var(--color-blue) !important;
-  border-color: var(--color-blue) !important;
-}
 
 /* ── Form Inputs ───────────────────────────────────────────────────────── */
 .stTextInput > div > div > input,
