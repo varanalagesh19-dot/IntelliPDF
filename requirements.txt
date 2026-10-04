@@ -28,9 +28,10 @@ groq
 google-generativeai
 requests
 
-# ── Config / validation / storage ───────────────────────────────────
+# ── Config / validation / storage / auth ────────────────────────────
 pydantic
 python-dotenv
+firebase-admin
 
 # ── In-process API transport (frontend/api_client.py on Streamlit Cloud) ──
 httpx

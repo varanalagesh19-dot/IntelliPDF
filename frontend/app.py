@@ -55,6 +55,14 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# ── User Authentication Gate ─────────────────────────────────────────────
+if "user" not in st.session_state or st.session_state.get("user") is None:
+    from frontend.login_page import show_login_page
+
+    show_login_page()
+    st.stop()
+
+
 # ── Google Fonts Import ──────────────────────────────────────────────────
 st.markdown(
     '<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&family=Walter+Turncoat&display=swap" rel="stylesheet">',
@@ -300,6 +308,28 @@ with st.sidebar:
         """,
         unsafe_allow_html=True,
     )
+
+    current_user = st.session_state.get("user", {})
+    user_email = current_user.get("email") or "student@intellipdf.local"
+    user_name = current_user.get("display_name") or user_email.split("@")[0].title()
+    user_provider = current_user.get("provider", "password")
+
+    st.markdown(
+        f"""
+        <div style="background: rgba(4,119,189,0.07); padding: 12px 14px; border-radius: 14px; margin-bottom: 12px; border: 1px solid rgba(4,119,189,0.18);">
+          <div style="font-weight: 700; color: #0C5D8C; font-size: 15px;">👤 {user_name}</div>
+          <div style="font-size: 12px; color: #2D2D2D; opacity: 0.85; word-break: break-all;">{user_email}</div>
+          <div style="margin-top: 6px;"><span class="badge-pill badge-blue">{user_provider.title()}</span></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    if st.button("Log out", use_container_width=True, key="btn_sidebar_logout"):
+        st.session_state.pop("user", None)
+        st.session_state.clear()
+        st.rerun()
+
+    st.markdown("---")
 
     health = fetch_health()
     if health is None:

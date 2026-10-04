@@ -65,9 +65,21 @@ CREATE TABLE IF NOT EXISTS study_plans (
     FOREIGN KEY (doc_id) REFERENCES documents (id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS users (
+    uid           TEXT PRIMARY KEY,
+    email         TEXT,
+    display_name  TEXT,
+    provider      TEXT,
+    phone         TEXT,
+    password_hash TEXT DEFAULT '',
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login    TIMESTAMP
+);
+
 CREATE INDEX IF NOT EXISTS idx_quiz_results_doc ON quiz_results (doc_id);
 CREATE INDEX IF NOT EXISTS idx_quizzes_doc ON quizzes (doc_id);
 CREATE INDEX IF NOT EXISTS idx_study_plans_doc ON study_plans (doc_id);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users (email);
 """
 
 
@@ -322,5 +334,78 @@ def latest_study_plan(doc_id: str) -> dict[str, Any] | None:
         data = dict(row)
         data["plan"] = json.loads(data.pop("plan_json") or "{}")
         return data
+    finally:
+        conn.close()
+
+
+# ── Users ────────────────────────────────────────────────────────────────
+
+
+def save_user(
+    uid: str,
+    email: str | None = None,
+    display_name: str | None = None,
+    provider: str = "password",
+    phone: str | None = None,
+    password_hash: str | None = None,
+) -> dict[str, Any]:
+    """Insert or update a user record and return the saved profile."""
+    _ensure_ready()
+    conn = get_connection()
+    try:
+        now = utc_now()
+        existing = conn.execute("SELECT * FROM users WHERE uid = ?", (uid,)).fetchone()
+        if existing:
+            conn.execute(
+                """
+                UPDATE users
+                SET email = COALESCE(?, email),
+                    display_name = COALESCE(?, display_name),
+                    provider = COALESCE(?, provider),
+                    phone = COALESCE(?, phone),
+                    password_hash = CASE WHEN ? IS NOT NULL AND ? != '' THEN ? ELSE password_hash END,
+                    last_login = ?
+                WHERE uid = ?
+                """,
+                (email, display_name, provider, phone, password_hash, password_hash, password_hash, now, uid),
+            )
+        else:
+            conn.execute(
+                """
+                INSERT INTO users (uid, email, display_name, provider, phone, password_hash, created_at, last_login)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (uid, email or "", display_name or "", provider, phone or "", password_hash or "", now, now),
+            )
+        conn.commit()
+        row = conn.execute("SELECT * FROM users WHERE uid = ?", (uid,)).fetchone()
+        return dict(row) if row else {"uid": uid, "email": email, "display_name": display_name, "provider": provider}
+    finally:
+        conn.close()
+
+
+def get_user(uid: str) -> dict[str, Any] | None:
+    """Retrieve user record by uid."""
+    _ensure_ready()
+    conn = get_connection()
+    try:
+        row = conn.execute("SELECT * FROM users WHERE uid = ?", (uid,)).fetchone()
+        return dict(row) if row else None
+    finally:
+        conn.close()
+
+
+def get_user_by_email(email: str) -> dict[str, Any] | None:
+    """Retrieve user record by email."""
+    if not email:
+        return None
+    _ensure_ready()
+    conn = get_connection()
+    try:
+        row = conn.execute(
+            "SELECT * FROM users WHERE lower(email) = lower(?)",
+            (email.strip(),),
+        ).fetchone()
+        return dict(row) if row else None
     finally:
         conn.close()

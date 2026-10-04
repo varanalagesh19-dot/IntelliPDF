@@ -113,6 +113,18 @@ HYBRID_LEXICAL_WEIGHT: Final[float] = _env_float("HYBRID_LEXICAL_WEIGHT", 0.4)
 
 # ── Upload limits ────────────────────────────────────────────────────────
 MAX_UPLOAD_MB: Final[int] = _env_int("MAX_UPLOAD_MB", 50)
+
+# ── Firebase Authentication ──────────────────────────────────────────────
+FIREBASE_API_KEY: Final[str] = _env_str("FIREBASE_API_KEY", "")
+FIREBASE_AUTH_DOMAIN: Final[str] = _env_str("FIREBASE_AUTH_DOMAIN", "")
+FIREBASE_PROJECT_ID: Final[str] = _env_str("FIREBASE_PROJECT_ID", "")
+FIREBASE_STORAGE_BUCKET: Final[str] = _env_str("FIREBASE_STORAGE_BUCKET", "")
+FIREBASE_MESSAGING_SENDER_ID: Final[str] = _env_str("FIREBASE_MESSAGING_SENDER_ID", "")
+FIREBASE_APP_ID: Final[str] = _env_str("FIREBASE_APP_ID", "")
+FIREBASE_SERVICE_ACCOUNT_PATH: Final[Path] = resolve_path(
+    _env_str("FIREBASE_SERVICE_ACCOUNT_PATH", "./firebase-service-account.json"),
+    PROJECT_ROOT / "firebase-service-account.json",
+)
 ALLOWED_PDF_SUFFIXES: Final[tuple[str, ...]] = (".pdf",)
 
 # ── Server ───────────────────────────────────────────────────────────────
