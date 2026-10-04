@@ -129,12 +129,12 @@ def handle_upload(uploaded_file: Any, syllabus: str = "") -> dict[str, Any]:
     embeddings = get_embedder().encode([chunk["text"] for chunk in chunks])
     get_vector_store().add(doc_id, embeddings, chunks)
 
-    db_module.add_document(
+    db_module.save_document(
         doc_id=doc_id,
         filename=uploaded_file.name,
+        file_path=str(stored_path),
         num_pages=num_pages,
         num_chunks=len(chunks),
-        filesize_bytes=len(payload),
         syllabus=syllabus or "",
     )
     return {
@@ -142,7 +142,8 @@ def handle_upload(uploaded_file: Any, syllabus: str = "") -> dict[str, Any]:
         "filename": uploaded_file.name,
         "num_pages": num_pages,
         "num_chunks": len(chunks),
-        "status": "indexed",
+        "status": "processed",
+        "message": f"Successfully indexed {num_pages} pages into {len(chunks)} chunks.",
     }
 
 
@@ -714,15 +715,16 @@ def main() -> None:
                                 },
                                 data={"syllabus": syllabus},
                             )
-                        except RuntimeError as exc:
-                            st.error(str(exc))
+                        except Exception as exc:
+                            st.error(f"Processing failed: {exc}")
                         else:
                             clear_caches()
-                            st.success(f"{result['message']}")
+                            msg = result.get("message", f"Indexed {result.get('num_pages', 0)} pages into {result.get('num_chunks', 0)} chunks.")
+                            st.success(msg)
                             m1, m2, m3 = st.columns(3)
-                            m1.metric("Pages", result["num_pages"])
-                            m2.metric("Chunks", result["num_chunks"])
-                            m3.metric("Doc ID", result["doc_id"][:10] + "...")
+                            m1.metric("Pages", result.get("num_pages", 0))
+                            m2.metric("Chunks", result.get("num_chunks", 0))
+                            m3.metric("Doc ID", str(result.get("doc_id", ""))[:10] + "...")
 
         with col2:
             st.markdown(
