@@ -1,5 +1,4 @@
-"""Unit tests for IntelliPDF authentication service."""
-
+import uuid
 import pytest
 from backend.services import auth
 from backend.utils import db as db_module
@@ -8,7 +7,7 @@ from backend.utils import db as db_module
 def test_local_registration_and_login():
     """Test user registration and subsequent login with password hash."""
     db_module.init_db()
-    test_email = "tester@intellipdf.test"
+    test_email = f"tester_{uuid.uuid4().hex[:8]}@intellipdf.test"
     test_pwd = "password123"
 
     user = auth.register_local_user(test_email, test_pwd, "Test Student")

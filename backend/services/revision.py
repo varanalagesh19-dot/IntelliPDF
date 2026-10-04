@@ -202,7 +202,11 @@ def build_revision_prompt(
 
 
 def generate_revision_cards(
-    doc_id: str, mode: str = "last_minute", num_cards: int = 10, language: str = "english"
+    doc_id: str,
+    mode: str = "last_minute",
+    num_cards: int = 10,
+    language: str = "english",
+    **kwargs: Any,
 ) -> dict[str, Any]:
     """Generate revision cards for a document.
 
@@ -211,6 +215,7 @@ def generate_revision_cards(
         mode: ``last_minute`` / ``definitions`` / ``key_concepts``.
         num_cards: How many cards to return.
         language: Output language.
+        **kwargs: Optional parameter aliases (e.g. count, card_type, topic).
 
     Returns:
         ``{"cards": [{"front", "back", "source_page"}], "provider", "sources"}``.
@@ -218,6 +223,14 @@ def generate_revision_cards(
     Raises:
         FileNotFoundError: The document has no vector index.
     """
+    if "count" in kwargs and ("num_cards" not in kwargs and num_cards == 10):
+        try:
+            num_cards = int(kwargs["count"])
+        except (ValueError, TypeError):
+            pass
+    if "card_type" in kwargs and mode == "last_minute":
+        mode = str(kwargs["card_type"])
+
     mode = mode if mode in MODE_GUIDANCE else "last_minute"
     chunks = sample_chunks(doc_id, num_cards)
     if not chunks:

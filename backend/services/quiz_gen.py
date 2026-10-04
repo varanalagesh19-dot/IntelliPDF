@@ -420,14 +420,17 @@ def generate_quiz(
 
 
 def score_submission(
-    doc_id: str, quiz_id: str, answers: list[int]
+    doc_id: str | None = None,
+    quiz_id: str | None = None,
+    answers: list[int] | dict[Any, Any] | None = None,
+    **kwargs: Any,
 ) -> dict[str, Any]:
     """Score a quiz submission and persist the attempt.
 
     Args:
-        doc_id: Document the quiz belongs to.
+        doc_id: Document the quiz belongs to (optional, resolved from quiz if omitted).
         quiz_id: Stored quiz id.
-        answers: Chosen option index per question (missing entries count wrong).
+        answers: Chosen option index per question (list or dict).
 
     Returns:
         ``{"score", "total", "percentage", "per_question_feedback",
@@ -436,17 +439,47 @@ def score_submission(
     Raises:
         FileNotFoundError: The quiz id is unknown.
     """
+    # Support flexible positional/keyword calls:
+    # 1. score_submission(quiz_id, answers)
+    # 2. score_submission(doc_id, quiz_id, answers)
+    # 3. score_submission(doc_id=..., quiz_id=..., answers=...)
+    if isinstance(quiz_id, (list, dict)) and isinstance(doc_id, str):
+        answers = quiz_id
+        quiz_id = doc_id
+        doc_id = None
+    elif quiz_id is None and isinstance(doc_id, str) and not kwargs.get("quiz_id"):
+        quiz_id = doc_id
+        doc_id = None
+
+    if not quiz_id and kwargs.get("quiz_id"):
+        quiz_id = kwargs["quiz_id"]
+    if answers is None and kwargs.get("answers") is not None:
+        answers = kwargs["answers"]
+    if not doc_id and kwargs.get("doc_id"):
+        doc_id = kwargs["doc_id"]
+
+    if not quiz_id:
+        raise ValueError("A valid quiz_id is required to score submission.")
+
     quiz = db.get_quiz(quiz_id)
     if not quiz:
         raise FileNotFoundError(f"Unknown quiz: {quiz_id}")
+
+    doc_id = str(doc_id or quiz.get("doc_id", ""))
+
+    if answers is None:
+        answers = []
 
     questions: list[dict[str, Any]] = quiz["questions"]
     feedback: list[dict[str, Any]] = []
     score = 0
     for index, question in enumerate(questions):
         try:
-            selected = int(answers[index])
-        except (IndexError, TypeError, ValueError):
+            if isinstance(answers, dict):
+                selected = int(answers.get(index, answers.get(str(index), -1)))
+            else:
+                selected = int(answers[index])
+        except (IndexError, TypeError, ValueError, KeyError):
             selected = -1
         is_correct = selected == int(question.get("correct_index", -1))
         score += int(is_correct)

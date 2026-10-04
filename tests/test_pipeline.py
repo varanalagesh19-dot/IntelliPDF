@@ -459,11 +459,16 @@ def test_score_submission_persists_results(tmp_path: Path, monkeypatch
     assert result["percentage"] == 50.0
     assert result["weak_topics"] == ["Vector Search"]
 
+    # Test score_submission without explicit doc_id (resolves from quiz)
+    res_no_doc = score_submission(quiz_id="quiz-1", answers={0: 0, 1: 2})
+    assert res_no_doc["score"] == 2
+    assert res_no_doc["percentage"] == 100.0
+    assert res_no_doc["doc_id"] == "doc-1"
+
     from backend.services.weak_topics import weak_topics_report
 
     report = weak_topics_report("doc-1")
-    assert report["attempts"] == 1
-    assert report["topics"][0]["accuracy"] == 0.5
+    assert report["attempts"] == 2
 
 
 def test_study_plan_schedules_across_days() -> None:

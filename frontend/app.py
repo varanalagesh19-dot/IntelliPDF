@@ -221,8 +221,9 @@ def api(method: str, path: str, **kwargs: Any) -> Any:
         # Quiz Submission
         if path in ("/quiz/submit", "/api/quiz/submit"):
             return services["score_submission"](
-                quiz_id=json_data["quiz_id"],
-                answers=json_data.get("answers", {}),
+                doc_id=json_data.get("doc_id"),
+                quiz_id=json_data.get("quiz_id"),
+                answers=json_data.get("answers", []),
             )
 
         # Answer Evaluation
@@ -246,10 +247,10 @@ def api(method: str, path: str, **kwargs: Any) -> Any:
         # Revision Flashcards
         if path in ("/revision", "/api/revision"):
             return services["generate_revision_cards"](
-                doc_id=json_data["doc_id"],
-                count=json_data.get("count", 10),
-                topic=json_data.get("topic", ""),
-                card_type=json_data.get("card_type", "flashcard"),
+                doc_id=json_data.get("doc_id", ""),
+                mode=json_data.get("mode", json_data.get("card_type", "last_minute")),
+                num_cards=int(json_data.get("num_cards", json_data.get("count", 10))),
+                language=json_data.get("language", "english"),
             )
 
         # Mock Exam
@@ -947,7 +948,7 @@ def main() -> None:
                             "POST",
                             "/quiz/submit",
                             json={
-                                "doc_id": doc_id,
+                                "doc_id": doc_id or quiz.get("doc_id", ""),
                                 "quiz_id": quiz["quiz_id"],
                                 "answers": ordered,
                             },
