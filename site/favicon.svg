@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="primaryGrad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#fb923c" />
+    </linearGradient>
+  </defs>
+  <!-- Background Rounded Rect -->
+  <rect width="48" height="48" rx="12" fill="#0f172a" />
+  <rect width="48" height="48" rx="12" stroke="url(#primaryGrad)" stroke-width="1.5" stroke-opacity="0.4" />
+  
+  <!-- Document Base -->
+  <path d="M14 10C12.8954 10 12 10.8954 12 12V36C12 37.1046 12.8954 38 14 38H34C35.1046 38 36 37.1046 36 36V18L28 10H14Z" fill="#1e293b" stroke="url(#primaryGrad)" stroke-width="2" stroke-linejoin="round"/>
+  
+  <!-- Folded Corner -->
+  <path d="M28 10V18H36" stroke="url(#primaryGrad)" stroke-width="2" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Doc lines -->
+  <line x1="17" y1="23" x2="25" y2="23" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+  <line x1="17" y1="28" x2="31" y2="28" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+  <line x1="17" y1="33" x2="27" y2="33" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- AI Sparkle star -->
+  <path d="M34 23L35.5 28L40.5 29.5L35.5 31L34 36L32.5 31L27.5 29.5L32.5 28L34 23Z" fill="url(#accentGrad)" />
+</svg>

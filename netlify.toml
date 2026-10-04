@@ -1,0 +1,18 @@
+# Netlify configuration for IntelliPDF Landing Page & App Embed
+
+[build]
+  # Directory containing the static site assets
+  publish = "site"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

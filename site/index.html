@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IntelliPDF — AI Exam Prep & RAG Learning Assistant</title>
+  <meta name="description" content="IntelliPDF transforms study materials into mark-wise exam preparation, auto-generated quizzes, student answer evaluation, and adaptive revision schedules.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="glow-orb orb-1" aria-hidden="true"></div>
+  <div class="glow-orb orb-2" aria-hidden="true"></div>
+  <div class="glow-orb orb-3" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand" aria-label="IntelliPDF Home">
+        <img src="favicon.svg" alt="IntelliPDF Logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">Intelli<span class="gradient-text">PDF</span></span>
+      </a>
+
+      <nav class="nav-links" id="navMenu">
+        <a href="#features" class="nav-item">Features</a>
+        <a href="#demo" class="nav-item">Mark-Wise Engine</a>
+        <a href="#app-preview" class="nav-item">Live Embed</a>
+        <a href="#architecture" class="nav-item">Architecture</a>
+        <a href="#deploy-guide" class="nav-item">Deploy Guide</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="https://github.com/varanalagesh19-dot/IntelliPDF" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" aria-label="GitHub Repository">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span class="desktop-only">GitHub</span>
+        </a>
+        <a href="#app-preview" class="btn btn-primary" id="btnScrollToApp">
+          <span>Launch App</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container hero-container">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>RAG-Powered AI Exam Learning Assistant</span>
+          <span class="badge-tag">v1.0 Live</span>
+        </div>
+
+        <h1 class="hero-title">
+          Turn Any Syllabus into <br>
+          <span class="gradient-text">High-Scoring Exam Prep</span>
+        </h1>
+
+        <p class="hero-description">
+          Upload course notes, textbooks, or syllabus PDFs. IntelliPDF generates mark-wise answers (1M to 16M), automated quizzes with weak-topic diagnosis, student answer evaluation, and tailored study timetables.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#app-preview" class="btn btn-primary btn-lg">
+            <span>Open Interactive App</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <button class="btn btn-secondary btn-lg" id="btnOpenDeployModal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>Deployment Setup</span>
+          </button>
+        </div>
+
+        <div class="stat-pills">
+          <div class="stat-pill">
+            <span class="stat-value">1M - 16M</span>
+            <span class="stat-label">Mark-wise Format</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-value">100%</span>
+            <span class="stat-label">Page-Referenced Grounding</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-value">3</span>
+            <span class="stat-label">Languages (EN, TA, Tanglish)</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-value">Multi-LLM</span>
+            <span class="stat-label">Groq + Gemini + Ollama</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Live App Embed Section -->
+    <section class="preview-section" id="app-preview">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="sub-badge">Live Interface</div>
+          <h2 class="section-title">Experience IntelliPDF In Real-Time</h2>
+          <p class="section-subtitle">
+            Interact with the hosted Streamlit application directly through this embedded viewport, or connect your personal instance.
+          </p>
+        </div>
+
+        <!-- Embedded Browser Mockup -->
+        <div class="browser-window">
+          <div class="browser-header">
+            <div class="window-controls">
+              <span class="control-dot dot-close"></span>
+              <span class="control-dot dot-minimize"></span>
+              <span class="control-dot dot-maximize"></span>
+            </div>
+
+            <div class="url-bar-container">
+              <svg class="lock-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input type="url" id="appUrlInput" class="url-input" value="https://intellipdf.streamlit.app" spellcheck="false" title="Streamlit App URL">
+              <button id="btnReloadIframe" class="url-action-btn" title="Reload Frame">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              </button>
+            </div>
+
+            <div class="browser-actions">
+              <button id="btnConfigureUrl" class="btn btn-xs btn-outline" title="Change target host">Configure URL</button>
+              <button id="btnFullscreenEmbed" class="btn btn-xs btn-primary" title="Expand Fullscreen">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                <span>Fullscreen</span>
+              </button>
+              <a id="btnExternalLaunch" href="https://intellipdf.streamlit.app" target="_blank" rel="noopener noreferrer" class="btn btn-xs btn-ghost" title="Open in new browser tab">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- The live viewport -->
+          <div class="browser-body" id="browserBody">
+            <div class="iframe-loader" id="iframeLoader">
+              <div class="spinner"></div>
+              <p>Connecting to IntelliPDF instance...</p>
+              <span class="loader-tip">If the Streamlit instance has been idle, it may take 20–30s to wake up.</span>
+            </div>
+
+            <iframe 
+              id="streamlitFrame" 
+              src="https://intellipdf.streamlit.app?embed=true" 
+              title="IntelliPDF Streamlit Application" 
+              loading="lazy" 
+              allow="clipboard-read; clipboard-write; microphone"
+            ></iframe>
+
+            <!-- Fallback interactive preview if user is offline or instance hasn't been set yet -->
+            <div class="embed-overlay-banner" id="embedBanner">
+              <span class="pulse-indicator"></span>
+              <span>Need to connect your personal deployment? <button id="btnBannerConfig">Click here to set your Streamlit URL</button></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Mark-Wise Answer Engine Demo -->
+    <section class="demo-section" id="demo">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="sub-badge">Signature Innovation</div>
+          <h2 class="section-title">Mark-Wise Exam Synthesis Engine</h2>
+          <p class="section-subtitle">
+            See how IntelliPDF reshapes the same core concept according to your academic marking criteria.
+          </p>
+        </div>
+
+        <div class="interactive-demo-card">
+          <div class="demo-sidebar">
+            <div class="demo-query-box">
+              <span class="query-label">Target Question:</span>
+              <p class="query-text">"Explain Convolutional Neural Networks (CNN) and their core layers."</p>
+              <span class="source-tag">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                Grounded in: DeepLearning_Notes.pdf (pp. 42-45)
+              </span>
+            </div>
+
+            <div class="mark-selector">
+              <span class="selector-title">Select Mark Weightage:</span>
+              <div class="mark-buttons">
+                <button class="mark-btn active" data-marks="2">2 Marks (Crisp Def)</button>
+                <button class="mark-btn" data-marks="5">5 Marks (Conceptual)</button>
+                <button class="mark-btn" data-marks="16">16 Marks (Full Essay)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-output-area">
+            <div class="output-header">
+              <span class="output-status" id="demoOutputStatus">Displaying 2-Mark Standard Answer</span>
+              <span class="confidence-badge">98.4% Grounding Score</span>
+            </div>
+            
+            <div class="output-content" id="demoOutputText">
+              <p><strong>Definition:</strong> A Convolutional Neural Network (CNN) is a specialized class of deep feed-forward artificial neural networks designed primarily for processing structured grid data such as images.</p>
+              <p><strong>Core Mechanism:</strong> It uses mathematical convolution operations instead of standard matrix multiplication in at least one layer to automatically learn spatial hierarchies of features.</p>
+              <div class="citation-chip">Page 42, Paragraph 2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="sub-badge">Comprehensive Tooling</div>
+          <h2 class="section-title">Built for Real Academic Success</h2>
+          <p class="section-subtitle">
+            Everything students and educators need to convert passive reading into active, high-yield exam preparation.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Card 1 -->
+          <div class="feature-card">
+            <div class="feature-icon icon-indigo">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </div>
+            <h3 class="feature-title">Mark-Wise Formatting</h3>
+            <p class="feature-desc">Generate answers calibrated strictly to examination weights: 1M definitions, 2M core concepts, 5M breakdowns, or 16M comprehensive answers.</p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="feature-card">
+            <div class="feature-icon icon-cyan">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><path d="M11 8v6M8 11h6"></path></svg>
+            </div>
+            <h3 class="feature-title">Verifiable RAG Grounding</h3>
+            <p class="feature-desc">Every factual claim is retrieved using hybrid FAISS dense + BM25 lexical embeddings with direct page number citations.</p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="feature-card">
+            <div class="feature-icon icon-rose">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <h3 class="feature-title">Automated Diagnostic Quizzes</h3>
+            <p class="feature-desc">Auto-extracts challenging multiple-choice and conceptual questions. Pinpoints weak topics with tailored remedy suggestions.</p>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="feature-card">
+            <div class="feature-icon icon-amber">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <h3 class="feature-title">Adaptive AI Study Plans</h3>
+            <p class="feature-desc">Enter your exam date and daily available study hours. IntelliPDF calculates optimal chapter pacing and revision milestones.</p>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="feature-card">
+            <div class="feature-icon icon-emerald">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <h3 class="feature-title">Student Answer Evaluation</h3>
+            <p class="feature-desc">Submit your drafted response. The AI grader compares it against source notes and highlights missing marks-earning keywords.</p>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="feature-card">
+            <div class="feature-icon icon-purple">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"></path></svg>
+            </div>
+            <h3 class="feature-title">Multilingual Fluency</h3>
+            <p class="feature-desc">Study comfortably in English, Tamil, or conversational Tanglish. Perfect for bilingual regional university curriculums.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture-section" id="architecture">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="sub-badge">Engineering & Pipeline</div>
+          <h2 class="section-title">Production-Grade RAG Pipeline</h2>
+          <p class="section-subtitle">
+            How IntelliPDF orchestrates vector indexing, semantic search, and fallback LLM inference.
+          </p>
+        </div>
+
+        <div class="pipeline-flow">
+          <div class="pipeline-step">
+            <div class="step-num">01</div>
+            <h4>PyMuPDF Ingestion</h4>
+            <p>Fast multi-page text & layout extraction preserving page coordinate anchors.</p>
+          </div>
+          <div class="pipeline-connector">➔</div>
+          <div class="pipeline-step">
+            <div class="step-num">02</div>
+            <h4>Chunking & Vectors</h4>
+            <p>Recursive character splitting + <code>all-MiniLM-L6-v2</code> embeddings into FAISS.</p>
+          </div>
+          <div class="pipeline-connector">➔</div>
+          <div class="pipeline-step">
+            <div class="step-num">03</div>
+            <h4>Hybrid Retrieval</h4>
+            <p>Dense vector cosine similarity combined with lexical ranking & abstention threshold.</p>
+          </div>
+          <div class="pipeline-connector">➔</div>
+          <div class="pipeline-step">
+            <div class="step-num">04</div>
+            <h4>Fallback LLM Chain</h4>
+            <p>Groq (Llama-3) ➔ Google Gemini ➔ Local Ollama fallback hierarchy.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deployment Guide Section -->
+    <section class="deploy-section" id="deploy-guide">
+      <div class="container">
+        <div class="deploy-card">
+          <div class="deploy-content">
+            <div class="sub-badge">Zero Cost Architecture</div>
+            <h2 class="deploy-title">Deploy in Under 3 Minutes</h2>
+            <p class="deploy-desc">
+              Netlify hosts this blazing-fast static landing page and embed UI. The Python RAG engine runs free on Streamlit Community Cloud or Hugging Face Spaces.
+            </p>
+            <div class="deploy-steps">
+              <div class="deploy-step-item">
+                <span class="step-badge">1</span>
+                <div>
+                  <strong>Deploy Backend to Streamlit Cloud</strong>
+                  <p>Go to share.streamlit.io, connect repo <code>IntelliPDF</code>, set entry point to <code>frontend/app.py</code>.</p>
+                </div>
+              </div>
+              <div class="deploy-step-item">
+                <span class="step-badge">2</span>
+                <div>
+                  <strong>Connect this Repo to Netlify</strong>
+                  <p>Netlify auto-detects <code>netlify.toml</code> and serves the <code>site/</code> directory with zero config.</p>
+                </div>
+              </div>
+              <div class="deploy-step-item">
+                <span class="step-badge">3</span>
+                <div>
+                  <strong>Link Your URLs</strong>
+                  <p>Enter your Streamlit app link into the interactive viewer or set it as default in <code>app.js</code>.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="deploy-code-box">
+            <div class="code-title">Quick Netlify CLI Deployment</div>
+            <pre><code># 1. Install Netlify CLI
+npm install -g netlify-cli
+
+# 2. Deploy directly from repository root
+netlify deploy --prod --dir=site</code></pre>
+            <div class="code-tip">Or simply link your GitHub repo in the Netlify web dashboard!</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <img src="favicon.svg" alt="IntelliPDF" width="28" height="28">
+        <span>IntelliPDF</span>
+        <span class="footer-tag">MIT Open Source</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/varanalagesh19-dot/IntelliPDF" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/varanalagesh19-dot/IntelliPDF/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+        <a href="#deploy-guide">Deployment Guide</a>
+      </div>
+      <p class="footer-copy">© 2026 IntelliPDF. Built for high-scoring, stress-free academic learning.</p>
+    </div>
+  </footer>
+
+  <!-- Modal for Configuring Custom Streamlit / App URL -->
+  <dialog class="modal-dialog" id="urlConfigDialog">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Configure Streamlit Live Embed URL</h3>
+        <button class="modal-close-btn" id="btnCloseConfigModal" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Enter your deployed Streamlit Community Cloud URL, Hugging Face Space URL, or local development server address:</p>
+        <div class="form-group">
+          <label for="customUrlField">Application URL:</label>
+          <input type="url" id="customUrlField" class="form-input" placeholder="https://your-app.streamlit.app" value="">
+          <span class="form-hint">Tip: For local testing, use <code>http://localhost:8501</code></span>
+        </div>
+        <div class="preset-buttons">
+          <button type="button" class="btn btn-xs btn-outline preset-btn" data-url="https://intellipdf.streamlit.app">Default Cloud Demo</button>
+          <button type="button" class="btn btn-xs btn-outline preset-btn" data-url="http://localhost:8501">Localhost:8501</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btnCancelConfig">Cancel</button>
+        <button class="btn btn-primary" id="btnSaveConfig">Save & Update Frame</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal for Deployment Guide -->
+  <dialog class="modal-dialog" id="deployModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🚀 Netlify + Streamlit Deployment Blueprint</h3>
+        <button class="modal-close-btn" id="btnCloseDeployModal" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h4>Why this two-tier architecture?</h4>
+        <p>Netlify provides instantaneous global CDN hosting, high security, and custom domain SSL for your website. Meanwhile, Streamlit handles the heavy Python, FAISS vector indexing, and LLM inference engine.</p>
+        
+        <div class="modal-step">
+          <strong>Step 1: Deploy Streamlit App (Free)</strong>
+          <p>Login to <a href="https://share.streamlit.io" target="_blank">share.streamlit.io</a>, select <code>varanalagesh19-dot/IntelliPDF</code>, set entry point to <code>frontend/app.py</code> and add secrets.</p>
+        </div>
+
+        <div class="modal-step">
+          <strong>Step 2: Deploy to Netlify (Free)</strong>
+          <p>Go to <a href="https://app.netlify.com" target="_blank">app.netlify.com</a> ➔ <strong>Add new site</strong> ➔ <strong>Import from Git</strong> ➔ Choose <code>IntelliPDF</code>. Netlify uses <code>netlify.toml</code> automatically.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="btnDismissDeployModal">Got it!</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
