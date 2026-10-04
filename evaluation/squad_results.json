@@ -1,0 +1,110 @@
+{
+  "config": {
+    "samples": 120,
+    "mark_type": "2M",
+    "language": "english",
+    "similarity_threshold": 0.12,
+    "mark_types_available": [
+      "1M",
+      "2M",
+      "5M",
+      "10M",
+      "15M",
+      "16M"
+    ]
+  },
+  "totals": {
+    "questions": 120,
+    "answerable": 66,
+    "unanswerable": 54,
+    "answerable_answered": 65,
+    "abstained_on_answerable": 1,
+    "unanswerable_correct": 6
+  },
+  "metrics": {
+    "exact_match": 0.0,
+    "f1": 0.1807,
+    "answerable_accuracy": 0.9848,
+    "unanswerable_accuracy": 0.1111
+  },
+  "providers": {
+    "extractive-fallback": 120
+  },
+  "examples": [
+    {
+      "id": "5726e5c95951b619008f81cd",
+      "question": "What are the components of drug therapy?",
+      "gold": [
+        "drug choice, dose, route, frequency, and duration of therapy"
+      ],
+      "prediction": "identifying goals of therapy - and duration of therapy)",
+      "is_answerable": true,
+      "abstained": false,
+      "confidence": 0.5394,
+      "em": 0.0,
+      "f1": 0.4706,
+      "pages": 1,
+      "chunks": 1
+    },
+    {
+      "id": "57284b904b864d19001648e5",
+      "question": "The Mitchell Tower is designed to look like what Oxford tower?",
+      "gold": [
+        "Oxford's Magdalen Tower"
+      ],
+      "prediction": "is modeled after Oxford's Magdalen Tower - patterned on the colleges of the University of Oxford.",
+      "is_answerable": true,
+      "abstained": false,
+      "confidence": 0.5198,
+      "em": 0.0,
+      "f1": 0.375,
+      "pages": 1,
+      "chunks": 1
+    },
+    {
+      "id": "57268d2ddd62a815002e894e",
+      "question": "What are the core treaties that the primary law of the EU consists of?",
+      "gold": [
+        "Treaty on European Union (TEU) and the Treaty on the Functioning of the European Union (TFEU)"
+      ],
+      "prediction": "The primary law of the EU consists mainly of the founding treaties - which is subject to international law.",
+      "is_answerable": true,
+      "abstained": false,
+      "confidence": 0.6289,
+      "em": 0.0,
+      "f1": 0.0714,
+      "pages": 1,
+      "chunks": 3
+    },
+    {
+      "id": "5a1c88d2b4fb5d001871467b",
+      "question": "Where were most municipal services concentrated at?",
+      "gold": [],
+      "prediction": "residents in unincorporated suburbs had difficulty obtaining municipal services - In 1958, a study recommended that the city of Jacksonville begin annexing outlying communities in order to create the needed tax base to i",
+      "is_answerable": false,
+      "abstained": false,
+      "confidence": 0.2848,
+      "em": 0.0,
+      "f1": 0.0714,
+      "pages": 1,
+      "chunks": 1
+    },
+    {
+      "id": "5729e1e36aef0514001550bb",
+      "question": "When the recovery between the widening gap between the richest citizens and rest of the nation slow?",
+      "gold": [
+        "2008-2009"
+      ],
+      "prediction": "the rest of the nation had slowed its recovery from the 2008-2009 recession - the resulting slow growth",
+      "is_answerable": true,
+      "abstained": false,
+      "confidence": 0.6738,
+      "em": 0.0,
+      "f1": 0.1429,
+      "pages": 1,
+      "chunks": 1
+    }
+  ],
+  "elapsed_seconds": 55.74,
+  "dataset": "rajpurkar/squad_v2 (validation split)"
+}

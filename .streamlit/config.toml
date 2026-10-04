@@ -1,0 +1,16 @@
+[theme]
+primaryColor            = "#0477BD"
+backgroundColor         = "#FFFDF9"
+secondaryBackgroundColor= "#FFFDF9"
+textColor               = "#2D2D2D"
+font                    = "sans serif"
+
+[server]
+headless = true
+# Streamlit Community Cloud allows 200 MB by default; subject PDFs are
+# usually small, so keep the ceiling modest and aligned with MAX_UPLOAD_MB.
+maxUploadSize = 50
+fileWatcherType = "auto"
+
+[browser]
+gatherUsageStats = false

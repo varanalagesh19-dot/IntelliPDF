@@ -1,0 +1,19 @@
+# IntelliPDF — keep line endings stable across Windows/macOS/Linux.
+# Without this, Windows checkouts turn run.sh into CRLF and Linux then fails
+# with "bad interpreter: /usr/bin/env bash^M" when the launcher is executed.
+* text=auto eol=lf
+
+*.py   text eol=lf
+*.sh   text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+*.json text eol=lf
+*.ini  text eol=lf
+
+# Never touch binaries
+*.pdf  binary
+*.pkl  binary
+*.faiss binary
+*.db   binary
+*.db-wal binary
+*.db-shm binary

@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Environment variables (SECRET - never commit)
+.env
+.env.local
+.env.*.local
+
+# Streamlit
+.streamlit/secrets.toml
+
+# User data (don't commit uploaded PDFs or vector DBs)
+backend/data/uploads/*
+backend/data/vector_db/*
+!backend/data/uploads/.gitkeep
+!backend/data/vector_db/.gitkeep
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+backend/data/intellipdf.db
+
+# Logs
+*.log
+backend.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Model cache
+.cache/
+sentence_transformers_cache/
